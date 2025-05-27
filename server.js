@@ -10,11 +10,14 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/chat-app', {
+require('dotenv').config(); // should be at the top
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  useUnifiedTopology: true,
+})
+.then(() => console.log("MongoDB connected"))
+.catch(err => console.error("MongoDB connection error:", err));
+
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));

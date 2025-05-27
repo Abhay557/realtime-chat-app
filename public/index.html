@@ -21,15 +21,14 @@
       <h1>Wassup</h1>
     </div>
 
-    <!-- ✅ ADD THIS: Message container to hold chat history -->
     <ul id="messages" class="message__list" style="list-style: none; padding-left: 0;"></ul>
 
-    <!-- Existing message area (can be used for typing feedback, etc.) -->
     <div class="message__area"></div>
 
-    <div>
-      <textarea id="textarea" cols="30" rows="1" placeholder="Write a message..."></textarea>
-    </div>
+    <form id="form">
+      <textarea id="input" cols="30" rows="1" placeholder="Write a message..."></textarea>
+      <button type="submit" style="display:none;">Send</button> <!-- Hidden button to allow submit on Enter -->
+    </form>
   </section>
 
   <script src="/socket.io/socket.io.js"></script>

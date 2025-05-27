@@ -1,76 +1,39 @@
 const socket = io();
-let name;
-let textarea = document.querySelector('#textarea');
-let messageArea = document.querySelector('.message__area');
-const onlineUsersList = document.getElementById('online-users-list');
+const form = document.getElementById('form');
+const input = document.getElementById('input');
+const messages = document.getElementById('messages');
 
-// Ask for username until given
-do {
-    name = prompt('Please enter your name: ');
-} while (!name);
+// Prompt for username
+let username = prompt("Enter your name:") || "Anonymous";
 
-// Send username to server to register online
-socket.emit('user_connected', name);
-
-// Send 'activity' event on user interaction to reset inactivity timer
-document.addEventListener('mousemove', () => {
-    socket.emit('activity');
-});
-document.addEventListener('keypress', () => {
-    socket.emit('activity');
+// Receive chat history
+socket.on('chat history', (history) => {
+  history.forEach(msg => {
+    appendMessage(msg.username, msg.content);
+  });
 });
 
-// Listen for online users update from server and update UI
-socket.on('online_users', (users) => {
-    if (!onlineUsersList) return;
-    onlineUsersList.innerHTML = '';
-    users.forEach(user => {
-        const li = document.createElement('li');
-        li.textContent = user.username;
-        onlineUsersList.appendChild(li);
+// Receive new chat messages
+socket.on('chat message', (msg) => {
+  appendMessage(msg.username, msg.content);
+});
+
+// Submit new message
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (input.value) {
+    socket.emit('chat message', {
+      username: username,
+      content: input.value
     });
+    input.value = '';
+  }
 });
 
-// Send message on Enter key
-textarea.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') {
-        sendMessage(e.target.value);
-    }
-});
-
-function sendMessage(message) {
-    let msg = {
-        user: name,
-        message: message.trim()
-    };
-    // Append outgoing message locally
-    appendMessage(msg, 'outgoing');
-    textarea.value = '';
-    scrollToBottom();
-
-    // Send message to server
-    socket.emit('message', msg);
+// Append message to list
+function appendMessage(user, text) {
+  const item = document.createElement('li');
+  item.innerHTML = `<strong>${user}:</strong> ${text}`;
+  messages.appendChild(item);
+  window.scrollTo(0, document.body.scrollHeight);
 }
-
-function appendMessage(msg, type) {
-    let mainDiv = document.createElement('div');
-    let className = type;
-    mainDiv.classList.add(className, 'message');
-
-    let markup = `
-        <h4>${msg.user}</h4>
-        <p>${msg.message}</p>
-    `;
-    mainDiv.innerHTML = markup;
-    messageArea.appendChild(mainDiv);
-}
-
-function scrollToBottom() {
-    messageArea.scrollTop = messageArea.scrollHeight;
-}
-
-// Listen for incoming messages from others
-socket.on('message', (msg) => {
-    appendMessage(msg, 'incoming');
-    scrollToBottom();
-});

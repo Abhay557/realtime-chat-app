@@ -33,7 +33,16 @@ io.on('connection', async (socket) => {
   } catch (err) {
     console.error('Error fetching messages:', err);
   }
-
+  
+app.get('/messages', async (req, res) => {
+  try {
+    const messages = await Message.find({}).sort({ createdAt: 1 }).limit(50);
+    res.json(messages);
+  } catch (err) {
+    console.error("Error fetching messages:", err);
+    res.status(500).json({ error: "Could not fetch messages" });
+  }
+});
   // Receive and broadcast chat messages
   socket.on('chat message', async (msgData) => {
     io.emit('chat message', msgData);

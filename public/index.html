@@ -2,30 +2,38 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wassup chat app</title>
-    <link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wassup chat app</title>
+  <link rel="stylesheet" href="/style.css" />
 </head>
 
 <body>
-    <!-- Online Users Panel -->
-<div id="online-users-panel" style="position: fixed; right: 0; top: 0; width: 200px; background: #f0f0f0; padding: 10px;">
-  <h3>Online Users</h3>
-  <ul id="online-users-list"></ul>
-</div>
-    <section class="chat__section">
-        <div class="brand">
-            <img height="40" src="/wassup.png" alt="">
-            <h1>Wassup</h1>
-        </div>
-        <div class="message__area"></div>
-        <div>
-            <textarea id="textarea" cols="30" rows="1" placeholder="Write a message..."></textarea>
-        </div>
-    </section>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/client.js"></script>
+  <!-- Online Users Panel -->
+  <div id="online-users-panel" style="position: fixed; right: 0; top: 0; width: 200px; background: #f0f0f0; padding: 10px;">
+    <h3>Online Users</h3>
+    <ul id="online-users-list"></ul>
+  </div>
+
+  <section class="chat__section">
+    <div class="brand">
+      <img height="40" src="/wassup.png" alt="" />
+      <h1>Wassup</h1>
+    </div>
+
+    <!-- ✅ ADD THIS: Message container to hold chat history -->
+    <ul id="messages" class="message__list" style="list-style: none; padding-left: 0;"></ul>
+
+    <!-- Existing message area (can be used for typing feedback, etc.) -->
+    <div class="message__area"></div>
+
+    <div>
+      <textarea id="textarea" cols="30" rows="1" placeholder="Write a message..."></textarea>
+    </div>
+  </section>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/client.js"></script>
 </body>
 
 </html>

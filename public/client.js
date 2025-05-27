@@ -31,9 +31,11 @@ form.addEventListener('submit', (e) => {
 });
 
 // Append message to list
-function appendMessage(user, text) {
-  const item = document.createElement('li');
-  item.innerHTML = `<strong>${user}:</strong> ${text}`;
-  messages.appendChild(item);
-  window.scrollTo(0, document.body.scrollHeight);
-}
+fetch('/messages')
+  .then(res => res.json())
+  .then(messages => {
+    messages.forEach(message => {
+      appendMessage({ user: message.username, message: message.message });
+    });
+  })
+  .catch(err => console.error("Error loading messages:", err));

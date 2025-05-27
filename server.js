@@ -1,6 +1,12 @@
-const express = require('express')
-const app = express()
-const http = require('http').createServer(app)
+require('dotenv').config();
+const express = require('express');
+const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const mongoose = require('mongoose');
+const socketIo = require('socket.io');
+const path = require('path');
+const User = require('./models/User');
 
 const PORT = process.env.PORT || 3000
 
@@ -24,3 +30,7 @@ io.on('connection', (socket) => {
     })
 
 })
+require('dotenv').config();
+
+const PORT = process.env.PORT || 3000;
+z
